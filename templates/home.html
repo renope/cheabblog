@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+
+    <h1>Posts</h1>
+    <div class="jumbotron"></div>
+
+    {% for post in object_list %}
+    <div class="border border-2 border-warning m-3 p-3">
+
+        <a style="color: rgb(0, 23, 151); text-decoration: none;" href="{% url 'article-detail' post.pk %}"><h4>{{ post.title }}</h4></a>
+        <a style="color: gray;" href="{% url 'category' post.category|slugify %}">({{ post.category }})</a>
+        {{ post.snippet }}
+        <!-- {{ post.content|slice:":100"|safe }}... -->
+
+        {% if user.is_authenticated %}
+        {% if user.id == post.author.id %}
+        <a href="{% url 'update_post' post.pk %}"><small>Edit</small></a>
+        <a style="color: red;" href="{% url 'delete_post' post.pk %}"><small>Delete</small></a>
+        {% endif %}
+        {% endif %}
+    </div>
+    {% endfor %}
+
+</div>
+</div>
+
+{{cat_menu}}
+{% endblock %}
