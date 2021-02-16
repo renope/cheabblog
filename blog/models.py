@@ -4,6 +4,7 @@ from django.urls import reverse
 from datetime import date, datetime
 from ckeditor.fields import RichTextField
 
+
 # Create your models here.
 
 
@@ -26,7 +27,6 @@ class Profile(models.Model):
     twitter_url = models.CharField(max_length=150, null=True, blank=True)
     instagram_url = models.CharField(max_length=150, null=True, blank=True)
     pinterest_url = models.CharField(max_length=150, null=True, blank=True)
-    
 
     def __str__(self):
         return str(self.user)
@@ -43,7 +43,7 @@ class Post(models.Model):
     content = RichTextField(blank=True, null=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
-    # updated_at = models.Datefield(auto_now=True)
+    # updated_at = models.DateField(auto_now=True)
     category = models.CharField(max_length=150, default='coding')
     snippet = models.CharField(max_length=150)
     likes = models.ManyToManyField(User, related_name='blog_posts')
@@ -60,3 +60,14 @@ class Post(models.Model):
     # create_at = models.DateTimeField(_("Create at"), auto_now_add=True)
     # update_at = models.DateTimeField(_("Update at"), auto_now=True)
     # publish_time = models.DateTimeField(_("Publish at"), db_index=True)
+
+
+class Comment(models.Model):
+    post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)
+    name = models.CharField(max_length=150)
+    content = models.TextField()
+    create_time = models.DateTimeField(auto_now_add=True)
+    # update_time = models.DateTimeField()
+
+    def __str__(self):
+        return '%s - %s' % (self.post.title, self.name)

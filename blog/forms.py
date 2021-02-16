@@ -1,13 +1,14 @@
 from django import forms
-from .models import Post, Category
+from .models import Post, Category, Comment
 
 # choices = [('coding', 'coding'), ('sports', 'sports'), ('entertainment', 'entertainment'),]
-choices = Category.objects.all().values_list('name','name')
+choices = Category.objects.all().values_list('name', 'name')
 
 choice_list = []
 
 for item in choices:
     choice_list.append(item)
+
 
 class PostForm(forms.ModelForm):
     class Meta:
@@ -17,9 +18,10 @@ class PostForm(forms.ModelForm):
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'title_tag': forms.TextInput(attrs={'class': 'form-control'}),
-            'author': forms.TextInput(attrs={'class': 'form-control', 'value': '', 'id' : 'input_author', 'type': 'hidden'}),
+            'author': forms.TextInput(
+                attrs={'class': 'form-control', 'value': '', 'id': 'input_author', 'type': 'hidden'}),
             'content': forms.Textarea(attrs={'class': 'form-control'}),
-            'category': forms.Select(choices=choice_list, attrs={'class': 'form-control',}),
+            'category': forms.Select(choices=choice_list, attrs={'class': 'form-control', }),
             # 'author': forms.Select(attrs={'class': 'form-control',}),
             'snippet': forms.Textarea(attrs={'class': 'form-control'}),
         }
@@ -35,4 +37,15 @@ class EditForm(forms.ModelForm):
             'title_tag': forms.TextInput(attrs={'class': 'form-control'}),
             'content': forms.Textarea(attrs={'class': 'form-control'}),
             'snippet': forms.Textarea(attrs={'class': 'form-control'}),
+        }
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ('name', 'content')
+
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'content': forms.Textarea(attrs={'class': 'form-control'}),
         }
